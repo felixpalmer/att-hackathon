@@ -277,15 +277,15 @@ doodoll.drawing = {
 
         var canvas_id = spec.canvas_id;
 
-        renderer = new_renderer({
+        renderer = doodoll.drawing.new_renderer({
             canvas_id: canvas_id
         });
 
-        sender = new_sender({
+        sender = doodoll.drawing.new_sender({
             output: renderer
         });
 
-        ui_engine = new_ui_engine({
+        ui_engine = doodoll.drawing.new_ui_engine({
             canvas_id: canvas_id,
             output: sender
         });
@@ -310,11 +310,11 @@ doodoll.drawing = {
 
         var canvas_id = spec.canvas_id;
 
-        renderer = new_renderer({
+        renderer = doodoll.drawing.new_renderer({
             canvas_id: canvas_id
         });
 
-        receiver = new_receiver({
+        receiver = doodoll.drawing.new_receiver({
             output: renderer
         });
 
