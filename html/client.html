@@ -22,16 +22,24 @@
 	<h2>Who Can Draw the Best Body Part?</h2>
 	<h1>DooDoll – Client</h1>
 
+	<a class="toggle">Buy boosts</a>
+
 	<form method="post">
 		<input type="submit" value"Done">
 	</form>
 
 </header>
 
+<div id="buyables">
+	<div class="popup">
+		<a href="" id="buyable_1" class="buyable"><img src="img/buyables/1.png"><label>Cool Item</label></a>
+		<a href="" id="buyable_2" class="buyable"><img src="img/buyables/2.png"><label>Cooler Item</label></a>
+		<div style="clear: both;"></div>
+	</div>
+</div>
+
 <div role="main" id="main">
 
-    </head>
-    <body>
 	<div id="user-info"></div>
 	<script>
 	  function updateUserInfo(response) {
@@ -39,7 +47,7 @@
 		  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
 		});
 	  }
-	</script>		
+	</script>
         <canvas id="component" width="400" height="600" style="border: 1px solid silver;"></canvas>
     </body>
 
@@ -47,10 +55,7 @@
 
 <footer>
 
-
-
 </footer>
-
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -63,7 +68,37 @@
 
 <script type="text/javascript" src="../drawing/draw_component.js"></script>
 <script type="text/javascript">
+
+	var transactionRedirectHandler = function (data) {
+		// Show new tab/window and redirect that to new location
+		window.open(data.url,"DooDoll – Transaction Redirect");//, specs, replace)
+	}
+
 	$(document).ready(function() {
+		var component_drawer = doodoll.drawing.new_component_drawer({
+			canvas_id: "component"
+		});
+
+		$(".toggle").click(function() {
+			if($("#buyables .popup").css("display") == 'none')
+				$("#buyables .popup").css("display", "block");
+			else
+				$("#buyables .popup").css("display", "none");
+		});
+
+		// Buyables can be bought on click
+		// jQuery.post( url, [data], [callback], [type] )
+		$(".buyable").click(function() {
+			$.post(
+				"warebuilder.com",
+				{
+					user_id 	: facebookUserId,
+					buyable_id 	: buyableId
+				},
+				transactionRedirectHandler(data)
+			);
+		});
+
 		var component_drawer = doodoll.drawing.new_component_drawer({
 			canvas_id: "component"
 		});
