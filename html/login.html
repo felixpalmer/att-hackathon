@@ -53,7 +53,7 @@
 
      if (response.authResponse) {
        console.log(response);
-       updateUserInfo(response);
+	   self.location = "client.html"
      }
    }
  </script>
@@ -62,13 +62,6 @@
      FB.login(function(response) { }, {scope:'email'});
      }
  </script>
- <script>
-	  function updateUserInfo(response) {
-		FB.api('/me', function(response) {
-		  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
-		});
-	  }
-	</script>		
 <div id="user-info"></div>
 <div role="main" id="main">
 	<div id="login" class="not_connected">
@@ -91,8 +84,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-
-
 
 <script src="js/plugins.js"></script>
 <script src="js/script.js"></script>
