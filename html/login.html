@@ -17,10 +17,10 @@
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
 
 </head>
-<body>
+<body class="not_connected">
 <header>
 	<h2>Who Can Draw the Best Body Part?</h2>
-	<h1>DooDoll ÐÊClient</h1>
+	<h1>DooDoll - Client</h1>
 
 </header>
 <div id="fb-root"></div>
@@ -58,16 +58,24 @@
    }
  </script>
  <script>
-   function loginUser() {    
-     FB.login(function(response) { }, {scope:'email'});     
+   function loginUser() {
+     FB.login(function(response) { }, {scope:'email'});
      }
  </script>
+ <script>
+	  function updateUserInfo(response) {
+		FB.api('/me', function(response) {
+		  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+		});
+	  }
+	</script>		
+<div id="user-info"></div>
 <div role="main" id="main">
-	<div id="login">
+	<div id="login" class="not_connected">
 	   <p><button onClick="loginUser();">Login</button></p>
 	 </div>
-	
-	 <div id="logout">
+
+	 <div id="logout" class="connected">
 	   <p><button  onClick="FB.logout();">Logout</button></p>
 	 </div>
 </div>
