@@ -132,6 +132,21 @@ doodoll.physics = function()
                                   }
                               }
                           };
+                          renderer.handle_update(update);
+                          
+                           update = {type : "line", 
+                                            data : {
+                                                from : {
+                                                    x : canvas_size,
+                                                    y : canvas_size
+                                                },
+                                                to : {
+                                                    x : canvas_size,
+                                                    y : canvas_size - 10
+                                                }
+                                            }
+                                        };
+                          
             renderer.handle_update(update);
         }
         
