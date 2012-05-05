@@ -303,7 +303,7 @@ doodoll.drawing = {
      * Spec
      * - canvas_id - The id of the canvas element to use.
      */
-    new_component_drawer: function(spec) {
+    new_component_viewer: function(spec) {
 
         var renderer;
         var receiver;
