@@ -134,7 +134,8 @@ doodoll.physics = function()
                                       x : input_canvas_size,
                                       y : input_canvas_size
                                   },
-                                  color : "#ff0000"
+                                  color : "#ff0000",
+                                  width : 1
                               },
                           };
                           renderer.handle_update(update);
@@ -149,7 +150,8 @@ doodoll.physics = function()
                                   x : input_canvas_size,
                                     y : input_canvas_size - 120
                               },
-                              color : "#00ff00"
+                              color : "#00ff00",
+                              width : 5
                           },
                       };
 
@@ -245,10 +247,7 @@ doodoll.drawing = {
 
         // Functions
         draw_line = function(line) {
-            ctx.lineStyle(2, parseInt(line.color.slice(1), 16));
-            // ctx.fillStyle = line.color;
-            // ctx.lineWidth = line.width;
-            // ctx.lineCap = "round";
+            ctx.lineStyle(line.width, parseInt(line.color.slice(1), 16));
 
             if (line.from.x != line.to.x || line.from.y != line.to.y) {
                 ctx.moveTo(scalingFactor*line.from.x, scalingFactor*line.from.y);
