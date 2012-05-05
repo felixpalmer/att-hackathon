@@ -21,8 +21,9 @@ function Start()
 			b2Body		= Box2D.Dynamics.b2Body,
 			b2FixtureDef	= Box2D.Dynamics.b2FixtureDef,
 			b2World		= Box2D.Dynamics.b2World,
-			b2PolygonShape	= Box2D.Collision.Shapes.b2PolygonShape;
-			b2CircleShape	= Box2D.Collision.Shapes.b2CircleShape;
+			b2PolygonShape	= Box2D.Collision.Shapes.b2PolygonShape,
+			b2CircleShape	= Box2D.Collision.Shapes.b2CircleShape,
+			b2RevoluteJointDef	= Box2D.Dynamics.Joints.b2RevoluteJointDef;
 	
 	world = new b2World(new b2Vec2(0, 10),  true);
 	up = new b2Vec2(0, -7);
@@ -51,7 +52,8 @@ function Start()
 	fixDef.shape.SetAsBox(1, 100);
 	world.CreateBody(bodyDef).CreateFixture(fixDef);
 	
-	// let's add 50 boxes
+	// let's add 10 joint boxes
+	var count = 1;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	var bd = new BitmapData("box.jpg", 1);
 	var w, h;			// width and height of box
@@ -60,50 +62,40 @@ function Start()
 		new b2Vec2(w,h), new b2Vec2(0,h)
 	];
     
-	for(var i = 0; i < 50; i++)
+    var jointDef = new b2RevoluteJointDef();
+    jointDef.enableLimit = true;
+    jointDef.lowerAngle = Math.PI/4;
+    jointDef.upperAngle = 3*Math.PI/2;
+	for(var i = 0; i < count; i++)
 	{
-		w = barr[1].x = barr[2].x = 0.3 + Math.random()*0.7;
-		h = barr[2].y = barr[3].y = 0.3 + Math.random()*0.7;
-		
-		fixDef.shape.SetAsArray(barr, 4);
-		bodyDef.position.Set(Math.random()*7, -5 + Math.random()*5);
-		
-		var body = world.CreateBody(bodyDef);
-		body.CreateFixture(fixDef);
-		bodies.push(body);
-		
-		var box = new Bitmap(bd);
-		box.scaleX = w/2; box.scaleY = h/2;
-		box.addEventListener(MouseEvent.MOUSE_OVER, Jump);
-		stage.addChild(box);
-		boxes.push(box);
-	}
-	
-    // Add some circles
-    var bd = new BitmapData("circle.png", 1);
-    var radius = 0.2;
-    var fixDefCircle = new b2FixtureDef();
-	fixDefCircle.density = 1.0;
-	fixDefCircle.friction = 0.2;
-	fixDefCircle.restitution = 0.1;
-	fixDefCircle.shape = new b2CircleShape(radius);
-	
-    for(var c = 0; c < 5; c++)
-    {
-        var circleBody = new b2BodyDef();
-        circleBody.type = b2Body.b2_dynamicBody;
-        circleBody.position.Set(Math.random()*7, -5 + Math.random()*5);
-        
-        var body = world.CreateBody(circleBody);
-        body.CreateFixture(fixDefCircle);
-        bodies.push(body);
+		// Make 2 rects and join them
+		var pair = [];
+		var pos = [Math.random()*7, -5 + Math.random()*5]
+    	for(var b = 0; b < 2; b++)
+    	{
+            w = barr[1].x = barr[2].x = 0.3 + Math.random()*0.7;
+            h = barr[2].y = barr[3].y = 0.3 + Math.random()*0.7;
 
-        var box = new Bitmap(bd);
-        box.scaleX = 2*radius; box.scaleY = 2*radius;
-        box.addEventListener(MouseEvent.MOUSE_OVER, Jump);
-        stage.addChild(box);
-        boxes.push(box);
-    }	
+            fixDef.shape.SetAsArray(barr, 4);
+            bodyDef.position.Set(pos[0], pos[1] + 2*b);
+
+            var body = world.CreateBody(bodyDef);
+            body.CreateFixture(fixDef);
+            pair[b] = body;
+
+            // For rendering
+            bodies.push(body);
+            var box = new Bitmap(bd);
+            box.scaleX = w/2; box.scaleY = h/2;
+            box.addEventListener(MouseEvent.MOUSE_OVER, Jump);
+            stage.addChild(box);
+            boxes.push(box);
+	    }
+	    
+	    // Join
+	    jointDef.Initialize(pair[0], pair[1], new b2Vec2(pos[0], pos[1] + 2));
+		world.CreateJoint(jointDef);
+	}	
 }
 
 function onEF(e) 
