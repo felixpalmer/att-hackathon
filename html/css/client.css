@@ -53,3 +53,8 @@ h2 {
 	display: none;
 	margin: 20px 0 0;
 }
+
+body.connected #login { display: none; }
+body.connected #logout { display: block; }
+body.not_connected #login { display: block; }
+body.not_connected #logout { display: none; }

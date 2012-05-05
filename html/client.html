@@ -32,6 +32,14 @@
 
     </head>
     <body>
+	<div id="user-info"></div>
+	<script>
+	  function updateUserInfo(response) {
+		FB.api('/me', function(response) {
+		  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+		});
+	  }
+	</script>		
         <canvas id="component" width="400" height="600" style="border: 1px solid silver;"></canvas>
     </body>
 
