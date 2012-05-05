@@ -26,6 +26,8 @@ fixDef.shape = new b2PolygonShape();
 var bodyDef = new b2BodyDef();
 bodyDef.type = b2Body.b2_staticBody;
 
+var scale = 0.5;
+
 function Start() 
 {	
     // Init stage & world
@@ -41,7 +43,7 @@ function Start()
     bg.scaleY = stage.stageHeight / 512;
     stage.addChild(bg);
 
-    up = new b2Vec2(0, -700);
+    up = new b2Vec2(0, -700*scale);
 
     //create ground
     bodyDef.position.Set(9, stage.stageHeight/100 + 1);
@@ -58,7 +60,7 @@ function Start()
     fixDef.shape.SetAsBox(1, 100);
     world.CreateBody(bodyDef).CreateFixture(fixDef);
 
-    for(var r = 0; r < 3; r++)
+    for(var r = 0; r < 6; r++)
     {
         addRagdollToWorld(world, stage);
     }
@@ -69,14 +71,17 @@ function addRagdollToWorld(world, stage)
     // Create a ragdoll
     var personX = Math.random()*7;
     var personY = (Math.random() - 1)*5;
-    var jointGap = 0.0;
-    var armLength = 1.5;
-    var armWidth = 0.3;
-    var legLength = 2.0;
-    var legWidth = 0.3;
-    
-    var head = [personX, personY, 1.5, 1.5]; // x, y, w, h
-    var body = [head[0], head[1] + head[3] + jointGap, 1.5, 2.5];
+    var jointGap = 0.0 * scale;
+    var headSize = 1.5 * scale;
+    var bodyLength = 2.5 * scale;
+    var bodyWidth = 1.7 * scale;
+    var armLength = 1.5 * scale;
+    var armWidth = 0.3 * scale;
+    var legLength = 2.0 * scale;
+    var legWidth = 0.3 * scale;
+        
+    var head = [personX, personY, headSize, headSize]; // x, y, w, h
+    var body = [head[0], head[1] + head[3] + jointGap, bodyWidth, bodyLength];
     var leftArm = [body[0] - (armLength + jointGap), body[1], armLength, armWidth];
     var rightArm = [body[0] + body[2] + jointGap, body[1], armLength, armWidth];    
     var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
