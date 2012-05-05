@@ -182,11 +182,14 @@ var new_ui_engine = function(spec) {
                     touch = touch_with_id(event_object, touch_id);
 
                     if (touch !== undefined) {
-                        draw_func = (event_object.type == "touchend") ?
-                                    draw_ended :
-                                    draw_moved;
                         point = point_for_touch(touch);
-                        draw_func(point);
+
+                        if (event_object.type === "touchmove") {
+                            draw_moved(point);
+                        } else {
+                            draw_ended(point);
+                            touch_id = null;
+                        }
                     }
                 }
 
