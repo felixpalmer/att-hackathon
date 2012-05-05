@@ -4,13 +4,14 @@
         <title>Draw a component</title>
         <script type="text/javascript" src="log.js"></script>
         <script type="text/javascript" src="jquery-1.7.2.js"></script>
+        <script type="text/javascript" src="http://50.56.70.123:8888/static/doll_sharer.js"></script>
         <script type="text/javascript" src="draw_component.js"></script>
     </head>
     <body>
         <canvas id="component" width="400" height="600" style="border: 1px solid black;"></canvas>
         <script type="text/javascript">
             $(document).ready(function() {
-                var component_drawer = new_component_drawer({
+                var component_drawer = doodoll.drawing.new_component_drawer({
                     canvas_id: "component"
                 });
             });
