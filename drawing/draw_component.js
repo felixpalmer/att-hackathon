@@ -215,21 +215,6 @@ doodoll.drawing = {
     new_receiver: function(spec) {
 
         var output = spec.output;
-
-        Meteor.subscribe("doodoll")
-        var Updates = new Meteor.Collection("updates");
-
-        var updates = Updates.find({});
-
-        updates.forEach(function(update) {
-            output.handle_update(update);
-        });
-
-        updates.observe({
-            added: function(update) {
-                output.handle_update(update);
-            }
-        });
     },
 
     /**
@@ -248,12 +233,8 @@ doodoll.drawing = {
 
         var handle_update;
 
-        Meteor.subscribe("doodoll")
-        var Updates = new Meteor.Collection("updates");
-
         // Functions
         handle_update = function(update) {
-            Updates.insert(update);
             output.handle_update(update);
         }
 
