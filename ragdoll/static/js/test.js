@@ -41,7 +41,7 @@ function Start()
     bg.scaleY = stage.stageHeight / 512;
     stage.addChild(bg);
 
-    up = new b2Vec2(0, -7);
+    up = new b2Vec2(0, -700);
 
     //create ground
     bodyDef.position.Set(9, stage.stageHeight/100 + 1);
@@ -110,7 +110,7 @@ function addRagdollToWorld(world, stage)
     jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
     world.CreateJoint(jointDef);
     
-    // BOOM!!!
+    world.ClearForces();
 }
 
 /**
@@ -157,6 +157,7 @@ function onEF(e)
 
 function Jump(e)
 {
+    console.log("Jump!");
     var i = boxes.indexOf(e.target);
     bodies[i].ApplyImpulse(up, bodies[i].GetWorldCenter());
 }
