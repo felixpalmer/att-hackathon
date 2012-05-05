@@ -25,12 +25,15 @@
 	<form method="post">
 		<input type="submit" value"Done">
 	</form>
-	
+
 </header>
 
 <div role="main" id="main">
 
-	<canvas></canvas>
+    </head>
+    <body>
+        <canvas id="component" width="400" height="600" style="border: 1px solid silver;"></canvas>
+    </body>
 
 </div>
 
@@ -46,11 +49,18 @@
 
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
-
-
 <script src="js/plugins.js"></script>
 
 <script src="js/script.js"></script>
+
+<script type="text/javascript" src="js/draw_component.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var component_drawer = doodoll.drawing.new_component_drawer({
+			canvas_id: "component"
+		});
+	});
+</script>
 
 </body>
 </html>
