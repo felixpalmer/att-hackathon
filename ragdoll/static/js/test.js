@@ -1,7 +1,3 @@
-var world;
-var bodies = [];
-var up;
-
 // Make life less painful
 var		
 b2Vec2		= Box2D.Common.Math.b2Vec2,
@@ -21,21 +17,27 @@ doodoll.physics = function()
 {
     var fixDef = new b2FixtureDef();
     var bodyDef = new b2BodyDef();
-    var scale = 0.5;
-
+    var scale = .5;
+    
+    var world;
+    var stage;
+    var bodies = [];
+    var up;
+    
     var start = function() 
     {	
+        // Init stage & world
+        world = new b2World(new b2Vec2(0, 10),  true);
+        stage = new Stage("c");
+        stage.eventChildren = false;
+        stage.addEventListener(Event.ENTER_FRAME, onEF);
+        
         fixDef.density = 10.0;
         fixDef.shape = new b2PolygonShape();
 
         bodyDef.type = b2Body.b2_staticBody;
 
-        // Init stage & world
-        world = new b2World(new b2Vec2(0, 10),  true);
 
-        var stage = new Stage("c");
-        stage.eventChildren = false;
-        stage.addEventListener(Event.ENTER_FRAME, onEF);
 
         // background
         var bg = new Bitmap( new BitmapData("winter2.jpg", 1) );
@@ -43,7 +45,7 @@ doodoll.physics = function()
         bg.scaleY = stage.stageHeight / 512;
         stage.addChild(bg);
 
-        up = new b2Vec2(0, -700*scale);
+        up = new b2Vec2(0, -70*scale);
 
         //create ground
         bodyDef.position.Set(9, stage.stageHeight/100 + 1);
@@ -62,11 +64,11 @@ doodoll.physics = function()
 
         for(var r = 0; r < 6; r++)
         {
-            addRagdollToWorld(world, stage);
+            addRagdollToWorld();
         }
     };
 
-    var addRagdollToWorld = function(world, stage)
+    var addRagdollToWorld = function()
     {
         // Create a ragdoll
         var personX = Math.random()*7;
@@ -115,7 +117,6 @@ doodoll.physics = function()
         jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
         world.CreateJoint(jointDef);
 
-        world.ClearForces();
         
         // Draw
         for(var b = 0; b < doodoll.boxes.length; b++)
@@ -135,6 +136,8 @@ doodoll.physics = function()
                           };
             renderer.handle_update(update);
         }
+        
+        world.ClearForces();
     };
 
     /**
@@ -153,11 +156,16 @@ doodoll.physics = function()
 
         // For rendering
         var s = new Sprite();
-        // box.scaleX = rect[2]/2; box.scaleY = rect[3]/2;
+        // s.scaleX = rect[2]/2; s.scaleY = rect[3]/2;
         s.addEventListener(MouseEvent.MOUSE_OVER, Jump);
         stage.addChild(s);
         doodoll.boxes.push(s);
-
+        
+        // Render in bg
+        s.graphics.beginBitmapFill(new BitmapData("box.jpg", 1));
+        s.graphics.drawRect(0, 0, 100*rect[2], 100*rect[3]);
+        s.graphics.endFill();
+        
         return body;
     };
 
