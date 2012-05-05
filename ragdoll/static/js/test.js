@@ -23,7 +23,7 @@ doodoll.physics = function()
     var stage;
     var bodies = [];
     var up;
-    var canvas_size = 100;
+    var canvas_size = 200;
     
     var start = function() 
     {	
@@ -72,7 +72,7 @@ doodoll.physics = function()
         // Create a ragdoll - don't change - bad things will happen
         var personX = Math.random()*7;
         var personY = (Math.random() - 1)*5;
-        var jointGap = 0.0 * scale;
+        var jointGap = -0.1 * scale;
         var headSize = 1.5 * scale;
         var bodyLength = 1.5 * scale;
         var bodyWidth = 1.5 * scale;
@@ -133,20 +133,20 @@ doodoll.physics = function()
                               }
                           };
                           renderer.handle_update(update);
-                          
-                           update = {type : "line", 
-                                            data : {
-                                                from : {
-                                                    x : canvas_size,
-                                                    y : canvas_size
-                                                },
-                                                to : {
-                                                    x : canvas_size,
-                                                    y : canvas_size - 10
-                                                }
-                                            }
-                                        };
-                          
+
+                          update = {type : "line", 
+                          data : {
+                              from : {
+                                  x : canvas_size,
+                                  y : canvas_size
+                              },
+                              to : {
+                                  x : canvas_size,
+                                    y : canvas_size - 10
+                              }
+                          }
+                      };
+
             renderer.handle_update(update);
         }
         
