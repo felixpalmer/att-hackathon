@@ -17,12 +17,13 @@ doodoll.physics = function()
 {
     var fixDef = new b2FixtureDef();
     var bodyDef = new b2BodyDef();
-    var scale = .5;
+    var scale = 1;
     
     var world;
     var stage;
     var bodies = [];
     var up;
+    var canvas_size = 100;
     
     var start = function() 
     {	
@@ -36,8 +37,6 @@ doodoll.physics = function()
         fixDef.shape = new b2PolygonShape();
 
         bodyDef.type = b2Body.b2_staticBody;
-
-
 
         // background
         var bg = new Bitmap( new BitmapData("winter2.jpg", 1) );
@@ -62,7 +61,7 @@ doodoll.physics = function()
         fixDef.shape.SetAsBox(1, 100);
         world.CreateBody(bodyDef).CreateFixture(fixDef);
 
-        for(var r = 0; r < 6; r++)
+        for(var r = 0; r < 2; r++)
         {
             addRagdollToWorld();
         }
@@ -70,16 +69,16 @@ doodoll.physics = function()
 
     var addRagdollToWorld = function()
     {
-        // Create a ragdoll
+        // Create a ragdoll - don't change - bad things will happen
         var personX = Math.random()*7;
         var personY = (Math.random() - 1)*5;
         var jointGap = 0.0 * scale;
         var headSize = 1.5 * scale;
-        var bodyLength = 2.5 * scale;
-        var bodyWidth = 1.7 * scale;
+        var bodyLength = 1.5 * scale;
+        var bodyWidth = 1.5 * scale;
         var armLength = 1.5 * scale;
         var armWidth = 0.3 * scale;
-        var legLength = 2.0 * scale;
+        var legLength = 1.5 * scale;
         var legWidth = 0.3 * scale;
 
         var head = [personX, personY, headSize, headSize]; // x, y, w, h
@@ -89,12 +88,12 @@ doodoll.physics = function()
         var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
         var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];    
 
-        var headBody = addRectToWorld(head, world, stage);
-        var bodyBody = addRectToWorld(body, world, stage);
-        var leftArmBody = addRectToWorld(leftArm, world, stage);
-        var rightArmBody = addRectToWorld(rightArm, world, stage);
-        var leftLegBody = addRectToWorld(leftLeg, world, stage);
-        var rightLegBody = addRectToWorld(rightLeg, world, stage);
+        var headBody = addRectToWorld(head, "6_limbs/head.png");
+        var bodyBody = addRectToWorld(body, "6_limbs/torso.png");
+        var leftArmBody = addRectToWorld(leftArm, "6_limbs/arm_l.png");
+        var rightArmBody = addRectToWorld(rightArm, "6_limbs/arm_r.png");
+        var leftLegBody = addRectToWorld(leftLeg, "6_limbs/leg_l.png");
+        var rightLegBody = addRectToWorld(rightLeg, "6_limbs/leg_r.png");
 
         // Link the wee lad up
         var jointDef = new b2RevoluteJointDef();
@@ -116,7 +115,6 @@ doodoll.physics = function()
         world.CreateJoint(jointDef);
         jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
         world.CreateJoint(jointDef);
-
         
         // Draw
         for(var b = 0; b < doodoll.boxes.length; b++)
@@ -125,12 +123,12 @@ doodoll.physics = function()
             var update = {type : "line", 
                               data : {
                                   from : {
-                                      x : 10,
-                                      y : 20
+                                      x : 0,
+                                      y : 0
                                   },
                                   to : {
-                                      x : 20,
-                                      y : 30
+                                      x : canvas_size,
+                                      y : canvas_size
                                   }
                               }
                           };
@@ -143,7 +141,7 @@ doodoll.physics = function()
     /**
     * Returns a body object (used for joints)
     */
-    var addRectToWorld = function(rect, world, stage)
+    var addRectToWorld = function(rect, bg)
     {
         var vertices = [new b2Vec2(0,0), new b2Vec2(rect[2],0), new b2Vec2(rect[2],rect[3]), new b2Vec2(0,rect[3])];
         fixDef.shape.SetAsArray(vertices, 4);            
@@ -156,14 +154,15 @@ doodoll.physics = function()
 
         // For rendering
         var s = new Sprite();
-        // s.scaleX = rect[2]/2; s.scaleY = rect[3]/2;
+        // s.scaleX = s.scaleY = 100 / canvas_size;
+        s.rect = rect;
         s.addEventListener(MouseEvent.MOUSE_OVER, Jump);
         stage.addChild(s);
         doodoll.boxes.push(s);
         
         // Render in bg
-        s.graphics.beginBitmapFill(new BitmapData("box.jpg", 1));
-        s.graphics.drawRect(0, 0, 100*rect[2], 100*rect[3]);
+        s.graphics.beginBitmapFill(new BitmapData(bg, 0));
+        s.graphics.drawRect(0, 0, 200, 200);
         s.graphics.endFill();
         
         return body;
@@ -180,9 +179,12 @@ doodoll.physics = function()
             body = bodies[i];
             box  = doodoll.boxes [i];
             p = body.GetPosition();
-            box.x = p.x *100;
-            box.y = p.y *100;
+            w = box.rect[2]; h = box.rect[3];
+            offX = (1.5 - w)/2; offY = (1.5 - h)/2; // TODO - do not hardcode
+            box.x = (p.x - offX*Math.cos(body.GetAngle()) + offY*Math.sin(body.GetAngle())) * 100;
+            box.y = (p.y - offX*Math.sin(body.GetAngle()) - offY*Math.cos(body.GetAngle())) * 100;
             box.rotation = body.GetAngle()*coef;
+            ;
         }
     };
 
