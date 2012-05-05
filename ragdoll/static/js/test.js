@@ -58,31 +58,59 @@ function Start()
     fixDef.shape.SetAsBox(1, 100);
     world.CreateBody(bodyDef).CreateFixture(fixDef);
 
-    // var jointDef = new b2RevoluteJointDef();
-    // jointDef.enableLimit = true;
-    // jointDef.lowerAngle = Math.PI/4;
-    // jointDef.upperAngle = 3*Math.PI/2;
+    for(var r = 0; r < 3; r++)
+    {
+        addRagdollToWorld(world, stage);
+    }
+}
 
-    // // Join
-    // jointDef.Initialize(pair[0], pair[1], new b2Vec2(pos[0], pos[1] + 2));
-    // world.CreateJoint(jointDef);
-
-    // Create a person
+function addRagdollToWorld(world, stage)
+{
+    // Create a ragdoll
     var personX = Math.random()*7;
     var personY = (Math.random() - 1)*5;
+    var jointGap = 0.0;
+    var armLength = 1.5;
+    var armWidth = 0.3;
+    var legLength = 2.0;
+    var legWidth = 0.3;
+    
     var head = [personX, personY, 1.5, 1.5]; // x, y, w, h
-    var body = [personX, personY + 1.8, 1.5, 2.5]; 
-    var leftArm = [personX - 1.5, personY + 1.8, 1.4, 0.3];
-    var rightArm = [personX + 1.5, personY + 1.8, 1.4, 0.3];    
-    var leftLeg = [personX + 0.1, personY + 4, 0.3, 2];
-    var rightLeg = [personX + 1.2, personY + 4, 0.3, 2];    
+    var body = [head[0], head[1] + head[3] + jointGap, 1.5, 2.5];
+    var leftArm = [body[0] - (armLength + jointGap), body[1], armLength, armWidth];
+    var rightArm = [body[0] + body[2] + jointGap, body[1], armLength, armWidth];    
+    var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
+    var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];    
 
-    addRectToWorld(head, world, stage);
-    addRectToWorld(body, world, stage);
-    addRectToWorld(leftArm, world, stage);
-    addRectToWorld(rightArm, world, stage);
-    addRectToWorld(leftLeg, world, stage);
-    addRectToWorld(rightLeg, world, stage); 
+    var headBody = addRectToWorld(head, world, stage);
+    var bodyBody = addRectToWorld(body, world, stage);
+    var leftArmBody = addRectToWorld(leftArm, world, stage);
+    var rightArmBody = addRectToWorld(rightArm, world, stage);
+    var leftLegBody = addRectToWorld(leftLeg, world, stage);
+    var rightLegBody = addRectToWorld(rightLeg, world, stage);
+    
+    // Link the wee lad up
+    var jointDef = new b2RevoluteJointDef();
+    jointDef.enableLimit = true;
+    
+    // Join head & body
+    jointDef.lowerAngle = -Math.PI/6; jointDef.upperAngle = Math.PI/6;
+    jointDef.Initialize(headBody, bodyBody, new b2Vec2(body[0] + body[2]/2, body[1]));
+    world.CreateJoint(jointDef);
+    
+    // Add arms
+    jointDef.Initialize(leftArmBody, bodyBody, new b2Vec2(body[0], body[1] + leftArm[3]/2));
+    world.CreateJoint(jointDef);
+    jointDef.Initialize(rightArmBody, bodyBody, new b2Vec2(body[0] + body[2], body[1] + rightArm[3]/2));
+    world.CreateJoint(jointDef);
+
+    // Add legs
+    jointDef.Initialize(leftLegBody, bodyBody, new b2Vec2(leftLeg[0] + leftLeg[2]/2, body[1] + body[3]));
+    world.CreateJoint(jointDef);
+    jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
+    world.CreateJoint(jointDef);
+    
+    // BOOM!!!
 }
 
 /**
