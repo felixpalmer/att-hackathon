@@ -62,12 +62,20 @@
      FB.login(function(response) { }, {scope:'email'});
      }
  </script>
+ <script>
+	  function updateUserInfo(response) {
+		FB.api('/me', function(response) {
+		  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+		});
+	  }
+	</script>		
+<div id="user-info"></div>
 <div role="main" id="main">
-	<div id="login">
+	<div id="login" class="not_connected">
 	   <p><button onClick="loginUser();">Login</button></p>
 	 </div>
 
-	 <div id="logout">
+	 <div id="logout" class="connected">
 	   <p><button  onClick="FB.logout();">Logout</button></p>
 	 </div>
 </div>
