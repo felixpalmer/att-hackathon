@@ -1,0 +1,55 @@
+/* =============================================================================
+   Client-specific styles
+   ========================================================================== */
+header,
+#main {
+	width: 846px;
+	margin: 0 auto;
+	position: relative;
+}
+
+header {
+	margin-top: 20px;
+}
+
+input {
+	position: absolute;
+	right: 24px;
+	top: 0;
+	background: url('../img/button_done.png') no-repeat top center;
+	width: 267px;
+	height: 101px;
+	text-indent: -999px;
+	overflow: hidden;
+	border: 0;
+}
+
+input:hover {
+	background-position: bottom center;
+}
+
+#main {
+	clear: both;
+	min-height: 1258px;
+	background: url('../img/paper2.png') no-repeat top center;
+}
+
+h1, h2 {
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	float: left;
+	background: url('../img/logo_small.png') no-repeat;
+	width: 508px;
+	height: 75px;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 20px 0 10px 20px;
+}
+
+h2 {
+	display: none;
+	margin: 20px 0 0;
+}
