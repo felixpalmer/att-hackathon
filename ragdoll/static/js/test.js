@@ -3,6 +3,8 @@ var bodies = [];
 var boxes  = [];
 var up;
 
+
+
 // Make life less painful
 var		
 b2Vec2		= Box2D.Common.Math.b2Vec2,
@@ -15,6 +17,8 @@ b2CircleShape	= Box2D.Collision.Shapes.b2CircleShape,
 b2RevoluteJointDef	= Box2D.Dynamics.Joints.b2RevoluteJointDef;
 
 // Global shared stuff - 1 meter = 100 pixels
+var doodoll = {};
+
 var fixDef = new b2FixtureDef();
 fixDef.density = 10.0;
 fixDef.shape = new b2PolygonShape();
@@ -63,15 +67,22 @@ function Start()
     // jointDef.Initialize(pair[0], pair[1], new b2Vec2(pos[0], pos[1] + 2));
     // world.CreateJoint(jointDef);
 
-    // Refactor box creation
-    for(var i = 0; i < 10; i++)
-    {
-        var rect = [Math.random()*7, (Math.random() - 1)*5, 1, 2,]; // x, y, w, h
-        addRectToWorld(
-            rect,
-            world,
-            stage);
-    }
+    // Create a person
+    var personX = Math.random()*7;
+    var personY = (Math.random() - 1)*5;
+    var head = [personX, personY, 1.5, 1.5]; // x, y, w, h
+    var body = [personX, personY + 1.8, 1.5, 2.5]; 
+    var leftArm = [personX - 1.5, personY + 1.8, 1.4, 0.3];
+    var rightArm = [personX + 1.5, personY + 1.8, 1.4, 0.3];    
+    var leftLeg = [personX + 0.1, personY + 4, 0.3, 2];
+    var rightLeg = [personX + 1.2, personY + 4, 0.3, 2];    
+
+    addRectToWorld(head, world, stage);
+    addRectToWorld(body, world, stage);
+    addRectToWorld(leftArm, world, stage);
+    addRectToWorld(rightArm, world, stage);
+    addRectToWorld(leftLeg, world, stage);
+    addRectToWorld(rightLeg, world, stage); 
 }
 
 /**
