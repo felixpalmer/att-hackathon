@@ -13,6 +13,9 @@ b2RevoluteJointDef	= Box2D.Dynamics.Joints.b2RevoluteJointDef;
 var doodoll;
 doodoll = doodoll || {};
 
+var canvas_size = 200;
+var input_canvas_size = 864;
+
 doodoll.physics = function()
 {
     var fixDef = new b2FixtureDef();
@@ -23,7 +26,6 @@ doodoll.physics = function()
     var stage;
     var bodies = [];
     var up;
-    var canvas_size = 200;
     
     var start = function() 
     {	
@@ -44,7 +46,7 @@ doodoll.physics = function()
         bg.scaleY = stage.stageHeight / 512;
         stage.addChild(bg);
 
-        up = new b2Vec2(0, -70*scale);
+        up = new b2Vec2(0, -200*scale);
 
         //create ground
         bodyDef.position.Set(9, stage.stageHeight/100 + 1);
@@ -83,8 +85,8 @@ doodoll.physics = function()
 
         var head = [personX, personY, headSize, headSize]; // x, y, w, h
         var body = [head[0], head[1] + head[3] + jointGap, bodyWidth, bodyLength];
-        var leftArm = [body[0] - (armLength + jointGap), body[1], armLength, armWidth];
-        var rightArm = [body[0] + body[2] + jointGap, body[1], armLength, armWidth];    
+        var leftArm = [body[0] - (armLength + jointGap), body[1] + 0.2, armLength, armWidth];
+        var rightArm = [body[0] + body[2] + jointGap, body[1] + 0.2, armLength, armWidth];    
         var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
         var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];    
 
@@ -105,12 +107,14 @@ doodoll.physics = function()
         world.CreateJoint(jointDef);
 
         // Add arms
-        jointDef.Initialize(leftArmBody, bodyBody, new b2Vec2(body[0], body[1] + leftArm[3]/2));
+        jointDef.lowerAngle = -Math.PI/2; jointDef.upperAngle = Math.PI/2;
+        jointDef.Initialize(leftArmBody, bodyBody, new b2Vec2(body[0] + 0.1, body[1] + leftArm[3]/2));
         world.CreateJoint(jointDef);
-        jointDef.Initialize(rightArmBody, bodyBody, new b2Vec2(body[0] + body[2], body[1] + rightArm[3]/2));
+        jointDef.Initialize(rightArmBody, bodyBody, new b2Vec2(body[0] + body[2] - 0.1, body[1] + rightArm[3]/2));
         world.CreateJoint(jointDef);
 
         // Add legs
+        jointDef.lowerAngle = -Math.PI/6; jointDef.upperAngle = Math.PI/6;
         jointDef.Initialize(leftLegBody, bodyBody, new b2Vec2(leftLeg[0] + leftLeg[2]/2, body[1] + body[3]));
         world.CreateJoint(jointDef);
         jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
@@ -127,24 +131,26 @@ doodoll.physics = function()
                                       y : 0
                                   },
                                   to : {
-                                      x : canvas_size,
-                                      y : canvas_size
-                                  }
-                              }
+                                      x : input_canvas_size,
+                                      y : input_canvas_size
+                                  },
+                                  color : "#ff0000"
+                              },
                           };
                           renderer.handle_update(update);
 
                           update = {type : "line", 
                           data : {
                               from : {
-                                  x : canvas_size,
-                                  y : canvas_size
+                                  x : input_canvas_size,
+                                  y : input_canvas_size
                               },
                               to : {
-                                  x : canvas_size,
-                                    y : canvas_size - 10
-                              }
-                          }
+                                  x : input_canvas_size,
+                                    y : input_canvas_size - 120
+                              },
+                              color : "#00ff00"
+                          },
                       };
 
             renderer.handle_update(update);
@@ -233,21 +239,20 @@ doodoll.drawing = {
         // Variables
         // For now assume we want to draw into box 0
         var ctx = doodoll.boxes[spec.canvas_id].graphics;
-        
         var draw_line;
-
         var handle_update;
+        var scalingFactor = canvas_size/input_canvas_size;
 
         // Functions
         draw_line = function(line) {
-            // ctx.strokeStyle = line.color;
+            ctx.lineStyle(2, parseInt(line.color.slice(1), 16));
             // ctx.fillStyle = line.color;
             // ctx.lineWidth = line.width;
             // ctx.lineCap = "round";
 
             if (line.from.x != line.to.x || line.from.y != line.to.y) {
-                ctx.moveTo(line.from.x, line.from.y);
-                ctx.lineTo(line.to.x, line.to.y);
+                ctx.moveTo(scalingFactor*line.from.x, scalingFactor*line.from.y);
+                ctx.lineTo(scalingFactor*line.to.x, scalingFactor*line.to.y);
             } else {
                 // // Can't draw a zero-length path, so just draw the point.
                 // ctx.beginPath();
