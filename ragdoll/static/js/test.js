@@ -1,9 +1,6 @@
 var world;
 var bodies = [];
-var boxes  = [];
 var up;
-
-
 
 // Make life less painful
 var		
@@ -22,7 +19,6 @@ doodoll = doodoll || {};
 
 doodoll.physics = function()
 {
-
     var fixDef = new b2FixtureDef();
     var bodyDef = new b2BodyDef();
     var scale = 0.5;
@@ -120,6 +116,25 @@ doodoll.physics = function()
         world.CreateJoint(jointDef);
 
         world.ClearForces();
+        
+        // Draw
+        for(var b = 0; b < doodoll.boxes.length; b++)
+        {
+            var renderer = doodoll.drawing.new_gfx_renderer({ canvas_id : b});
+            var update = {type : "line", 
+                              data : {
+                                  from : {
+                                      x : 10,
+                                      y : 20
+                                  },
+                                  to : {
+                                      x : 20,
+                                      y : 30
+                                  }
+                              }
+                          };
+            renderer.handle_update(update);
+        }
     };
 
     /**
@@ -137,12 +152,11 @@ doodoll.physics = function()
         bodies.push(body);
 
         // For rendering
-        var bd = new BitmapData("box.jpg", 1);
-        var box = new Bitmap(bd);
-        box.scaleX = rect[2]/2; box.scaleY = rect[3]/2;
-        box.addEventListener(MouseEvent.MOUSE_OVER, Jump);
-        stage.addChild(box);
-        boxes.push(box);
+        var s = new Sprite();
+        // box.scaleX = rect[2]/2; box.scaleY = rect[3]/2;
+        s.addEventListener(MouseEvent.MOUSE_OVER, Jump);
+        stage.addChild(s);
+        doodoll.boxes.push(s);
 
         return body;
     };
@@ -153,10 +167,10 @@ doodoll.physics = function()
         world.ClearForces();
 
         var p, body, box, coef = 180/Math.PI;
-        for(var i=0; i<boxes.length; i++)
+        for(var i=0; i<doodoll.boxes.length; i++)
         {
             body = bodies[i];
-            box  = boxes [i];
+            box  = doodoll.boxes [i];
             p = body.GetPosition();
             box.x = p.x *100;
             box.y = p.y *100;
@@ -167,7 +181,7 @@ doodoll.physics = function()
     var Jump = function(e)
     {
         console.log("Jump!");
-        var i = boxes.indexOf(e.target);
+        var i = doodoll.boxes.indexOf(e.target);
         bodies[i].ApplyImpulse(up, bodies[i].GetWorldCenter());
     };
 
@@ -175,5 +189,59 @@ doodoll.physics = function()
         start : start  
     };
 }();
+
+// Contains all the boxes to draw 
+doodoll.boxes = [];
+
+doodoll.drawing = {
+    /**
+     * Create a new renderer object to draw updates onto a canvas.
+     *
+     * Spec:
+     * - canvas_id - The id of the canvas element to use.
+     *
+     * Public functions:
+     * - handle_update - Draw an update onto the canvas
+     */
+    new_gfx_renderer: function(spec) {
+
+        // Variables
+        // For now assume we want to draw into box 0
+        var ctx = doodoll.boxes[spec.canvas_id].graphics;
+        
+        var draw_line;
+
+        var handle_update;
+
+        // Functions
+        draw_line = function(line) {
+            // ctx.strokeStyle = line.color;
+            // ctx.fillStyle = line.color;
+            // ctx.lineWidth = line.width;
+            // ctx.lineCap = "round";
+
+            if (line.from.x != line.to.x || line.from.y != line.to.y) {
+                ctx.moveTo(line.from.x, line.from.y);
+                ctx.lineTo(line.to.x, line.to.y);
+            } else {
+                // // Can't draw a zero-length path, so just draw the point.
+                // ctx.beginPath();
+                // ctx.arc(line.from.x, line.from.y, 
+                //         line.width/2.0, 2*Math.PI, true);
+            }
+        }
+
+        handle_update = function(update) {
+            if (update.type == "line") {
+                draw_line(update.data);
+            }
+        }
+
+        // Spec
+        return {
+            handle_update: handle_update
+        }
+    }
+};
 
 window.onload = doodoll.physics.start;
