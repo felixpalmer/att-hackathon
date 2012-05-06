@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 
 	<title>DooDoll – Server</title>
 	<meta name="description" content="">
@@ -68,11 +69,11 @@
 		var params = {};
 		params['message'] = 'Message';
 		params['link'] = 'http://warebuilder.com/';
-		params['picture'] = 'http://www.warebuilder.com/att-hackathon/html/img/bg.jpg';		
+		params['picture'] = 'http://www.warebuilder.com/att-hackathon/html/img/bg.jpg';
 		//params['name'] = 'Name';
 		//params['description'] = 'Description';
 		params['caption'] = '';
-		  
+
 		FB.api('/me/feed', 'post', params, function(response) {
 			console.log(response);
 		  if (!response || response.error) {
