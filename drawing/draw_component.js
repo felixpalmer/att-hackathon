@@ -209,12 +209,20 @@ doodoll.drawing = {
      *
      * Spec
      * - output - The component to send updates to using "handle_update"
+     * - component_id - The id for the component to send
      *
      * Public functions:
      */
     new_receiver: function(spec) {
 
         var output = spec.output;
+        var component_id = spec.component_id;
+
+        var handle_update = function(update) {
+            output.handle_update(update);
+        }
+
+        doll_sharer.add_update_handler(component_id, handle_update);
     },
 
     /**
@@ -222,6 +230,7 @@ doodoll.drawing = {
      *
      * Spec
      * - output - The component to send updates to using "handle_update"
+     * - component_id - The id for the component to send
      *
      * Public functions:
      * - handle_update - Send an update to the server and pass it on to the 
@@ -230,11 +239,13 @@ doodoll.drawing = {
     new_sender: function(spec) {
 
         var output = spec.output;
+        var component_id = spec.component_id;
 
         var handle_update;
 
         // Functions
         handle_update = function(update) {
+            doll_sharer.send_update(component_id, update);
             output.handle_update(update);
         }
 
@@ -249,6 +260,7 @@ doodoll.drawing = {
      *
      * Spec
      * - canvas_id - The id of the canvas element to use.
+     * - component_id - the id of the component being displayed
      */
     new_component_drawer: function(spec) {
 
@@ -257,13 +269,15 @@ doodoll.drawing = {
         var ui_engine;
 
         var canvas_id = spec.canvas_id;
+        var component_id = spec.component_id;
 
         renderer = doodoll.drawing.new_renderer({
             canvas_id: canvas_id
         });
 
         sender = doodoll.drawing.new_sender({
-            output: renderer
+            output: renderer,
+            component_id: component_id
         });
 
         ui_engine = doodoll.drawing.new_ui_engine({
@@ -283,6 +297,7 @@ doodoll.drawing = {
      *
      * Spec
      * - canvas_id - The id of the canvas element to use.
+     * - component_id - the id of the component being displayed
      */
     new_component_viewer: function(spec) {
 
@@ -290,13 +305,15 @@ doodoll.drawing = {
         var receiver;
 
         var canvas_id = spec.canvas_id;
+        var component_id = spec.component_id;
 
         renderer = doodoll.drawing.new_renderer({
             canvas_id: canvas_id
         });
 
         receiver = doodoll.drawing.new_receiver({
-            output: renderer
+            output: renderer,
+            component_id: component_id
         });
 
         return {

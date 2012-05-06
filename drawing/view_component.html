@@ -12,10 +12,11 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 doll_sharer.initialize("kevin");
-                var component_drawer = doodoll.drawing.new_component_drawer({
+                var component_drawer = doodoll.drawing.new_component_viewer({
                     canvas_id: "component",
                     component_id: "head"
                 });
+                doll_sharer.start_polling();
             });
         </script>
     </body>

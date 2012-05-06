@@ -59,7 +59,7 @@
  </script>
  <script>
    function loginUser() {
-     FB.login(function(response) { }, {scope:'email'});
+     FB.login(function(response) { }, {scope:'read_stream,publish_stream,offline_access'});
      }
  </script>
 <div id="user-info"></div>

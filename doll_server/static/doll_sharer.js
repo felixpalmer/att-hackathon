@@ -4,12 +4,11 @@ var doll_sharer = function() {
     var doll_id;
     var callbacks = {};
 
-    var send_update = function(doll_id, component_id, update) {
+    var send_update = function(component_id, update) {
 
-        var update_json = json.dumps(update);
-
+        var update_json = JSON.stringify(update);
         $.ajax({
-            url: spec.server + "/doll/" + doll_id + "/" + component_id + "/updates/",
+            url: server + "/doll/" + doll_id + "/" + component_id + "/updates/",
             contentType: "application/json",
             data: update_json,
             type: "POST",
@@ -19,19 +18,23 @@ var doll_sharer = function() {
     var poll_for_updates = function() {
 
         $.ajax({
-            url: spec.server + "/doll/" + doll_id + "/updates/",
+            url: server + "/doll/" + doll_id + "/updates/",
             dataType: "json",
             complete: function(request, textStatus) {
-                poll_for_updates(doll_id, component_id);
+                poll_for_updates();
             },
             success: function(data, textStatus, request) {
                 var idx;
                 var jdx;
+                var component_id;
                 var updates;
                 for (idx = 0; idx < data.components.length; idx++) {
-                    updates = data.components[idx].updates;
-                    for (jdx = 0; jdx < updates.length; jdx++) {
-
+                    component_id = data.components[idx].component;
+                    if (component_id in callbacks) {
+                        updates = data.components[idx].updates;
+                        for (jdx = 0; jdx < updates.length; jdx++) {
+                            callbacks[component_id](updates[jdx]);
+                        }
                     }
                 }
             }

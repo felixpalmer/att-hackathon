@@ -12,6 +12,10 @@ class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
 
+    def options(self, *args, **kwargs):
+        self.set_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.set_header("Access-Control-Allow-Headers", "Content-Type")
+
 class DollHandler(BaseHandler):
 
     @tornado.web.asynchronous
@@ -22,6 +26,7 @@ class DollHandler(BaseHandler):
     def handle_updates(self, updates):
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(updates))
+        self.finish()
 
 class ComponentHandler(BaseHandler):
 
