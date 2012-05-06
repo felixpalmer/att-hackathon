@@ -3,25 +3,25 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-	<title>DooDoll</title>
+	<title>DooDoll – Server</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
 	<meta name="viewport" content="width=device-width">
 
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/client.css">
 
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
+	<script src="js/libs/ivank.js"></script>
+	<script src="js/libs/Box2dWeb-2.1.a.3.min.js"></script>
+	<script src="js/ragdoll2.js"></script>
 
 </head>
-<body class="not_connected">
+<body>
 <header>
 	<h2>Who Can Draw the Best Body Part?</h2>
-	<h1>DooDoll - Client</h1>
-
+	<h1>DooDoll – Server</h1>
 </header>
 <div id="fb-root"></div>
 <script>
@@ -46,31 +46,52 @@
      ref.parentNode.insertBefore(js, ref);
    }(document));
 </script>
-
- <script>
+<script>
    function handleStatusChange(response) {
      document.body.className = response.authResponse ? 'connected' : 'not_connected';
 
      if (response.authResponse) {
        console.log(response);
-	   self.location = "client.html"
+	   updateUserInfo(response);
      }
    }
- </script>
- <script>
-   function loginUser() {
-     FB.login(function(response) { }, {scope:'read_stream,publish_stream,offline_access'});
-     }
- </script>
+</script>
+<script>
+  function updateUserInfo(response) {
+	FB.api('/me', function(response) {
+	  document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+	});
+  }
+</script>
+<script>
+	function postToWall(response) {
+		var params = {};
+		params['message'] = 'Message';
+		params['link'] = 'http://warebuilder.com/';
+		params['picture'] = 'http://www.warebuilder.com/att-hackathon/html/img/bg.jpg';
+		//params['name'] = 'Name';
+		//params['description'] = 'Description';
+		params['caption'] = '';
+
+		FB.api('/me/feed', 'post', params, function(response) {
+			console.log(response);
+		  if (!response || response.error) {
+			alert('Error occured');
+		  } else {
+			alert('Published to stream - you might want to delete it now!');
+		  }
+		});
+	}
+</script>
 <div id="user-info"></div>
 <div role="main" id="main">
-	<div id="login" class="not_connected">
-	   <p><button onClick="loginUser();">Log in with Facebook</button></p>
-	 </div>
+<!--post to http://www.facebook.com/[PROFILE_ID]/feed?access_token=[ACCESS_TOKEN]&message=[MESSAGE]&link=[LINK]&picture=[PICTURE] -->
+	<input 	type="button" value="Post to wall" onClick="postToWall();">
+	<canvas></canvas>
 
-	 <div id="logout" class="connected">
-	   <p><button  onClick="FB.logout();">Logout</button></p>
-	 </div>
+  <div role="main" id="main" style="width:900px; width:700px; overflow: hidden;">
+
+<canvas id="c" width="900" height="700"></canvas>
 </div>
 
 <footer>
@@ -85,7 +106,11 @@
 
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
+
+
 <script src="js/plugins.js"></script>
+
 <script src="js/script.js"></script>
+
 </body>
 </html>
