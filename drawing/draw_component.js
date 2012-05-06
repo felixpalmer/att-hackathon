@@ -140,7 +140,7 @@ doodoll.drawing = {
             last_point = null;
         }
 
-        draw_moved = function(touch) {
+        draw_moved = function(point) {
             if (type === "line") {
                 send_line(last_point, point);
             }
