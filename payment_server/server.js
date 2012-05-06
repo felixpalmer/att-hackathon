@@ -42,34 +42,32 @@ function sendPost(host, headers, data, cb) {
                     'headers': headers};
 
   var post = http.request(reqOptions, function(res) {
-    console.log(res.statusCode);
-    console.log(JSON.stringify(res.headers));
     res.setEncoding('utf8');
     res.on('data', function(chunk) {
-      console.log('TEST');
-      console.log(chunk);
       cb(chunk);
     });
     res.on('error', function(err) {
       console.log(err);
     });
   });
-  console.log(post);
 
   post.write(JSON.stringify(data));
   post.end();
 };
 
 function sendGet(url, headers, cb) {
-  var reqOptions = {'url': url,
+  var hostName = url.parse(host);
+  var reqOptions = {'hostname': hostName,
                     'method': 'GET',
                     'headers': headers};
 
   var get = http.request(reqOptions, function(res) {
     res.setEncoding('utf8');
     res.on('data', function(chunk) {
-      console.log(chunk);
       cb(chunk);
+    });
+    res.on('error', function(err) {
+      console.log(err);
     });
   });
 
@@ -93,32 +91,29 @@ function payment(cb) {
               };
 
   sendPost(host, headers, data, function(result) {
-    //console.log(result);
-    //var signed = result.data.signeddocument;
-    //var signature = result.data.signature;
-    //redirect client to this url
-    //var redirectUrl = 'http://api/att.com/Commerce/Payment/Rest/2/Transactions?Signature='+signature+'&SignedPaymentDetail='+signed;
-    //cb(null, redirectUrl);
+    var signed = result.data.signeddocument;
+    var signature = result.data.signature;
+    var redirectUrl = 'http://api/att.com/Commerce/Payment/Rest/2/Transactions?Signature='+signature+'&SignedPaymentDetail='+signed;
+    cb(null, redirectUrl);
   });
 };
 
-/*
 var successful: function(data) {
   var transactionAuthCode = data.TransactionAuthCode;
   var result;
-  var url = 'https://api.att.com/oauth/access_token?grant_type=client_credentials&client_id=4481acb392fb376ea58868eccae95872&client_secret=12ed0e43e1df5687&scope=PAYMENT';
+  var host = 'https://api.att.com/oauth/access_token?grant_type=client_credentials&client_id=4481acb392fb376ea58868eccae95872&client_secret=12ed0e43e1df5687&scope=PAYMENT';
   var headers = {'Accept': "*//*"};
-  Meteor.http.get(url, {'headers': headers}, function(result) {
-    console.log(result);
+  sendGet(host, headers, function(result) {
     var access_token = result.data.access_token;
     var expires_in = result.data.expires_in;
     var refresh_token = result.data.refresh_token;
-    var url = 'https://api.att.com/Commerce/Payment/Rest/2/TRansactions/TransactionAuthCode/'+transactionAuthCode+'?access_token='+access_token;
+    var host = 'https://api.att.com/Commerce/Payment/Rest/2/TRansactions/TransactionAuthCode/'+transactionAuthCode+'?access_token='+access_token;
     var headers = {'Accept': 'application/json'};
-    Meteor.http.get(url, {'headers': headers}, function(result) {
+    sendGet(host, headers, function(result) {
       console.log(result);
     });
-});*/
+  });
+});
 
 function uuid() {
   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
