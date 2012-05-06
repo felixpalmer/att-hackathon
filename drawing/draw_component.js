@@ -82,7 +82,7 @@ doodoll.drawing = {
         var canvas = $("#" + spec.canvas_id);
         var output = spec.output;
 
-        var color = "black";
+        var color = "#000000";
         var type = "line";
         var line_width = 12.0;
         var last_point = null;
