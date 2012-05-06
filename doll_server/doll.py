@@ -25,7 +25,9 @@ class Doll(object):
         })
         self.component_updates = {}
         self.listener = None
-        tornado.ioloop.remove_timeout(self.timeout)
+
+        if self.timeout is not None:
+            tornado.ioloop.IOLoop.instance().remove_timeout(self.timeout)
 
     def get_updates(self, listener):
 
@@ -33,12 +35,13 @@ class Doll(object):
         if len(self.component_updates) > 0:
             self.make_callback()
         else:
-            self.timeout = tornado.ioloop.add_timeout(time.time() + 30.0,
-                                                      self.do_timeout)
+            self.timeout = tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 30.0,
+                                                                        self.do_timeout)
 
     def do_timeout(self):
-        self.listener({
-            "components": []
-        })
-        self.listener = None
+        if self.listener is not None:
+            self.listener({
+                "components": []
+            })
+            self.listener = None
         self.timeout = None
