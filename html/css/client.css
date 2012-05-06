@@ -12,6 +12,36 @@ header {
 	margin-top: 50px;
 }
 
+/* login button */
+button {
+	background: #ddd;
+	border-radius: 15px;
+	box-shadow: 2px 2px 6px black;
+	width: 460px;
+	font-size: 60px;
+	text-align: center;
+	margin: 100px 100px;
+	font-family: 'GoodDogRegular';
+	padding: 20px;
+	background-image:         linear-gradient(to bottom, #eee, #ccc);
+	border: 1px solid #fff;
+}
+
+#user-info {
+	position: absolute;
+	left: 135px;
+	top: -147px;
+	background: silver;
+	border-radius: 15px;
+	padding: 5px 15px;
+	box-shadow: 1px 1px 4px black;
+}
+
+#user-info img {
+	width: 30px;
+	margin-right: 10px;
+}
+
 input {
 	position: absolute;
 	right: 24px;
