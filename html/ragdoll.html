@@ -7,4 +7,30 @@
   	<script src="js/ragdoll.js"></script>
 	</head>
 	<body style="background-color: rgb(0, 0, 0); margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; "><canvas id="c" width="1183" height="889"></canvas>
+
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script type="text/javascript" src="http://50.56.70.123:8888/static/doll_sharer.js"></script>
+<script type="text/javascript" src="../drawing/draw_component.js"></script>
+
+<script type="text/javascript">
+    function getURLParameter(name) {
+        return decodeURI(
+            (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+        );
+    }
+
+    var doll_id = "doll_one";
+
+    $(document).ready(function() {
+        doodoll.physics.start();
+        doll_sharer.initialize(doll_id);
+        var component_drawer = doodoll.drawing.new_component_viewer({
+            renderer: doodoll.rendering.new_gfx_renderer({
+              canvas_id: 0
+            }),
+            component_id: "head"
+        });
+        doll_sharer.start_polling();
+    });
+</script>
 </body></html>

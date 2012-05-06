@@ -301,15 +301,17 @@ doodoll.drawing = {
      */
     new_component_viewer: function(spec) {
 
-        var renderer;
+        var renderer = spec.renderer;
         var receiver;
 
         var canvas_id = spec.canvas_id;
         var component_id = spec.component_id;
 
-        renderer = doodoll.drawing.new_renderer({
-            canvas_id: canvas_id
-        });
+        if (renderer === undefined) {
+            renderer = doodoll.drawing.new_renderer({
+                canvas_id: canvas_id
+            });
+        }
 
         receiver = doodoll.drawing.new_receiver({
             output: renderer,

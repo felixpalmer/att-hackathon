@@ -123,7 +123,7 @@ doodoll.physics = function()
         // Draw
         for(var b = 0; b < doodoll.boxes.length; b++)
         {
-            var renderer = doodoll.drawing.new_gfx_renderer({ canvas_id : b});
+            var renderer = doodoll.rendering.new_gfx_renderer({ canvas_id : b});
             var update = {type : "line", 
                               data : {
                                   from : {
@@ -226,7 +226,7 @@ doodoll.physics = function()
 // Contains all the boxes to draw 
 doodoll.boxes = [];
 
-doodoll.drawing = {
+doodoll.rendering = {
     /**
      * Create a new renderer object to draw updates onto a canvas.
      *
@@ -273,4 +273,3 @@ doodoll.drawing = {
     }
 };
 
-window.onload = doodoll.physics.start;

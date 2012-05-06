@@ -139,14 +139,8 @@
 			);
         });
 
-        function getURLParameter(name) {
-            return decodeURI(
-                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-            );
-        }
-
-        var doll_id = getURLParameter("doll") || "doll_one";
-        var component_id = getURLParameter("component") || "head";
+        var doll_id = "doll_one";
+        var component_id = "head";
 
         doll_sharer.initialize(doll_id);
         var component_drawer = doodoll.drawing.new_component_drawer({
