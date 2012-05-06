@@ -90,12 +90,12 @@ doodoll.physics = function()
         var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
         var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];
 
-        var headBody = addRectToWorld(head, "./6_limbs/head.png");
-        var bodyBody = addRectToWorld(body, "./6_limbs/torso.png");
-        var leftArmBody = addRectToWorld(leftArm, "./6_limbs/arm_l.png");
-        var rightArmBody = addRectToWorld(rightArm, "./6_limbs/arm_r.png");
-        var leftLegBody = addRectToWorld(leftLeg, "./6_limbs/leg_l.png");
-        var rightLegBody = addRectToWorld(rightLeg, "./6_limbs/leg_r.png");
+        var headBody = addRectToWorld(head, "img/placeholder/head.png");
+        var bodyBody = addRectToWorld(body, "img/placeholder/torso.png");
+        var leftArmBody = addRectToWorld(leftArm, "img/placeholder/arm_l copy.png");
+        var rightArmBody = addRectToWorld(rightArm, "img/placeholder/arm_r copy.png");
+        var leftLegBody = addRectToWorld(leftLeg, "img/placeholder/leg_l copy.png");
+        var rightLegBody = addRectToWorld(rightLeg, "img/placeholder/leg_r.png");
 
         // Link the wee lad up
         var jointDef = new b2RevoluteJointDef();

@@ -15,7 +15,7 @@
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
 	<script src="js/libs/ivank.js"></script>
 	<script src="js/libs/Box2dWeb-2.1.a.3.min.js"></script>
-	<script src="js/ragdoll.js"></script>
+	<script src="js/ragdoll2.js"></script>
 
 </head>
 <body>
@@ -68,11 +68,11 @@
 		var params = {};
 		params['message'] = 'Message';
 		params['link'] = 'http://warebuilder.com/';
-		params['picture'] = 'http://www.warebuilder.com/att-hackathon/html/img/bg.jpg';		
+		params['picture'] = 'http://www.warebuilder.com/att-hackathon/html/img/bg.jpg';
 		//params['name'] = 'Name';
 		//params['description'] = 'Description';
 		params['caption'] = '';
-		  
+
 		FB.api('/me/feed', 'post', params, function(response) {
 			console.log(response);
 		  if (!response || response.error) {
