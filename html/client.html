@@ -105,6 +105,7 @@
 
 <script src="js/script.js"></script>
 
+<script type="text/javascript" src="http://50.56.70.123:8888/static/doll_sharer.js"></script>
 <script type="text/javascript" src="../drawing/draw_component.js"></script>
 <script type="text/javascript">
 
@@ -138,8 +139,10 @@
 			);
 		});
 
-		var component_drawer = doodoll.drawing.new_component_drawer({
-			canvas_id: "component"
+        doll_sharer.initialize("doll_one");
+        var component_drawer = doodoll.drawing.new_component_drawer({
+            canvas_id: "component",
+            component_id: "head"
 		});
 	});
 </script>
