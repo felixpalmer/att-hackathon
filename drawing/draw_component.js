@@ -117,8 +117,8 @@ doodoll.drawing = {
         }
 
         point_for_touch = function(touch) {
-            var offset_x = touch.pageX - canvas.position().left;
-            var offset_y = touch.pageY - canvas.position().top;
+            var offset_x = touch.pageX - canvas.offset().left;
+            var offset_y = touch.pageY - canvas.offset().top;
 
             var point = {
                 x: canvas_size.width * offset_x / canvas.width(),
