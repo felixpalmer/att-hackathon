@@ -1,5 +1,5 @@
 // Make life less painful
-var
+var		
 b2Vec2		= Box2D.Common.Math.b2Vec2,
 b2BodyDef	= Box2D.Dynamics.b2BodyDef,
 b2Body		= Box2D.Dynamics.b2Body,
@@ -21,20 +21,20 @@ doodoll.physics = function()
     var fixDef = new b2FixtureDef();
     var bodyDef = new b2BodyDef();
     var scale = 1;
-
+    
     var world;
     var stage;
     var bodies = [];
     var up;
-
-    var start = function()
-    {
+    
+    var start = function() 
+    {	
         // Init stage & world
         world = new b2World(new b2Vec2(0, 10),  true);
         stage = new Stage("c");
         stage.eventChildren = false;
         stage.addEventListener(Event.ENTER_FRAME, onEF);
-
+        
         fixDef.density = 10.0;
         fixDef.shape = new b2PolygonShape();
 
@@ -86,16 +86,16 @@ doodoll.physics = function()
         var head = [personX, personY, headSize, headSize]; // x, y, w, h
         var body = [head[0], head[1] + head[3] + jointGap, bodyWidth, bodyLength];
         var leftArm = [body[0] - (armLength + jointGap), body[1] + 0.2, armLength, armWidth];
-        var rightArm = [body[0] + body[2] + jointGap, body[1] + 0.2, armLength, armWidth];
+        var rightArm = [body[0] + body[2] + jointGap, body[1] + 0.2, armLength, armWidth];    
         var leftLeg = [body[0] + 0.1, body[1] + body[3] + jointGap, legWidth, legLength];
-        var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];
+        var rightLeg = [body[0] + body[2] - (legWidth + 0.1), body[1] + body[3] + jointGap, legWidth, legLength];    
 
-        var headBody = addRectToWorld(head, "./6_limbs/head.png");
-        var bodyBody = addRectToWorld(body, "./6_limbs/torso.png");
-        var leftArmBody = addRectToWorld(leftArm, "./6_limbs/arm_l.png");
-        var rightArmBody = addRectToWorld(rightArm, "./6_limbs/arm_r.png");
-        var leftLegBody = addRectToWorld(leftLeg, "./6_limbs/leg_l.png");
-        var rightLegBody = addRectToWorld(rightLeg, "./6_limbs/leg_r.png");
+        var headBody = addRectToWorld(head, "6_limbs/head.png");
+        var bodyBody = addRectToWorld(body, "6_limbs/torso.png");
+        var leftArmBody = addRectToWorld(leftArm, "6_limbs/arm_l.png");
+        var rightArmBody = addRectToWorld(rightArm, "6_limbs/arm_r.png");
+        var leftLegBody = addRectToWorld(leftLeg, "6_limbs/leg_l.png");
+        var rightLegBody = addRectToWorld(rightLeg, "6_limbs/leg_r.png");
 
         // Link the wee lad up
         var jointDef = new b2RevoluteJointDef();
@@ -119,12 +119,12 @@ doodoll.physics = function()
         world.CreateJoint(jointDef);
         jointDef.Initialize(rightLegBody, bodyBody, new b2Vec2(rightLeg[0] + rightLeg[2]/2, body[1] + body[3]));
         world.CreateJoint(jointDef);
-
+        
         // Draw
         for(var b = 0; b < doodoll.boxes.length; b++)
         {
             var renderer = doodoll.drawing.new_gfx_renderer({ canvas_id : b});
-            var update = {type : "line",
+            var update = {type : "line", 
                               data : {
                                   from : {
                                       x : 0,
@@ -140,7 +140,7 @@ doodoll.physics = function()
                           };
                           renderer.handle_update(update);
 
-                          update = {type : "line",
+                          update = {type : "line", 
                           data : {
                               from : {
                                   x : input_canvas_size,
@@ -157,7 +157,7 @@ doodoll.physics = function()
 
             renderer.handle_update(update);
         }
-
+        
         world.ClearForces();
     };
 
@@ -167,7 +167,7 @@ doodoll.physics = function()
     var addRectToWorld = function(rect, bg)
     {
         var vertices = [new b2Vec2(0,0), new b2Vec2(rect[2],0), new b2Vec2(rect[2],rect[3]), new b2Vec2(0,rect[3])];
-        fixDef.shape.SetAsArray(vertices, 4);
+        fixDef.shape.SetAsArray(vertices, 4);            
         bodyDef.position.Set(rect[0], rect[1]);
         bodyDef.type = b2Body.b2_dynamicBody;
 
@@ -182,16 +182,16 @@ doodoll.physics = function()
         s.addEventListener(MouseEvent.MOUSE_OVER, Jump);
         stage.addChild(s);
         doodoll.boxes.push(s);
-
+        
         // Render in bg
         s.graphics.beginBitmapFill(new BitmapData(bg, 0));
         s.graphics.drawRect(0, 0, 200, 200);
         s.graphics.endFill();
-
+        
         return body;
     };
 
-    var onEF = function(e)
+    var onEF = function(e) 
     {
         world.Step(1 / 60,  3,  3);
         world.ClearForces();
@@ -219,11 +219,11 @@ doodoll.physics = function()
     };
 
     return {
-        start : start
+        start : start  
     };
 }();
 
-// Contains all the boxes to draw
+// Contains all the boxes to draw 
 doodoll.boxes = [];
 
 doodoll.drawing = {
@@ -255,7 +255,7 @@ doodoll.drawing = {
             } else {
                 // // Can't draw a zero-length path, so just draw the point.
                 // ctx.beginPath();
-                // ctx.arc(line.from.x, line.from.y,
+                // ctx.arc(line.from.x, line.from.y, 
                 //         line.width/2.0, 2*Math.PI, true);
             }
         }
