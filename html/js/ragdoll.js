@@ -138,7 +138,7 @@ doodoll.physics = function()
                                   width : 1
                               },
                           };
-                          renderer.handle_update(update);
+//                          renderer.handle_update(update);
 
                           update = {type : "line",
                           data : {
@@ -155,7 +155,7 @@ doodoll.physics = function()
                           },
                       };
 
-            renderer.handle_update(update);
+ //           renderer.handle_update(update);
         }
 
         world.ClearForces();
