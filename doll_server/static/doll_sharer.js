@@ -1,6 +1,6 @@
 var doll_sharer = function() {
 
-    var server = "http://50.56.70.123:8888";
+    var server = "http://localhost:8888";
     var doll_id;
     var callbacks = {};
 

@@ -50,5 +50,5 @@ if __name__ == "__main__":
         (r"/doll/(\w+)/updates/", DollHandler, { "manager": manager }),
         (r"/doll/(\w+)/(\w+)/updates/", ComponentHandler, { "manager": manager })
     ], **settings)
-    application.listen(8888, "50.56.70.123")
+    application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
